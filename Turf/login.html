@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura - Sign In</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div class="login-card">
+        <div class="header">
+            <div class="logo">
+                <span class="logo-icon"></span>x    
+                Turf Master
+            </div>
+            <h2>Welcome back</h2>
+            <p>Please enter your details to sign in</p>
+        </div>
+
+        <div class="social-login">
+            <a href="#" class="social-icon google"><i class="fab fa-google"></i></a>    </div>
+
+        <div class="or-separator">
+            <span>OR</span>
+        </div>
+
+        <form class="login-form" id="loginForm">
+            <div class="input-group">
+                <label for="email">Your Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Your Email Address" required>
+                <span class="error-message" id="emailError"></span>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" placeholder="*********" required minlength="8">
+                    <button type="button" class="toggle-password" id="togglePassword">
+                        <i class="far fa-eye-slash" id="eyeIcon"></i>
+                    </button>
+                </div>
+                <span class="error-message" id="passwordError"></span>
+            </div>
+
+            <div class="options-row">
+                <div class="remember-me">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                <a href="frgtpssswd.html" class="forgot-password">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="sign-in-btn">Sign in</button>
+        </form>
+
+        <div class="signup-link">
+            Don't have an account? <a href="signup.html">Sign up</a>
+        </div>
+    </div>
+
+    <!-- Firebase SDK v11 -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js';
+        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
+        
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCEdy6zKaD5E_jEj7Kp512yBEfzpM57WWQ",
+            authDomain: "turfmaster-pro-web.firebaseapp.com",
+            projectId: "turfmaster-pro-web",
+            storageBucket: "turfmaster-pro-web.firebasestorage.app",
+            messagingSenderId: "691367310841",
+            appId: "1:691367310841:web:348924036eba10540fb928",
+            measurementId: "G-MEQ34BEQ5V"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        
+        // Make Firebase services available globally
+        window.firebaseAuth = auth;
+        window.firebaseProvider = provider;
+        
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                // Store user data
+                const userData = {
+                    id: user.uid,
+                    name: user.displayName || email.split('@')[0],
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    emailVerified: user.emailVerified
+                };
+                
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+                
+                // Redirect to home page
+                window.location.href = 'home.html';
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                const errorMessage = document.getElementById('emailError');
+                if (errorMessage) {
+                    errorMessage.textContent = error.message;
+                }
+            }
+        });
+        
+        // Handle Google sign-in
+        document.querySelector('.social-icon.google').addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                
+                // Store user data
+                const userData = {
+                    id: user.uid,
+                    name: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    emailVerified: user.emailVerified
+                };
+                
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+                
+                // Redirect to home page
+                window.location.href = 'home.html';
+                
+            } catch (error) {
+                console.error('Google sign-in error:', error);
+                const errorMessage = document.getElementById('emailError');
+                if (errorMessage) {
+                    errorMessage.textContent = 'Google sign-in failed. Please try again.';
+                }
+            }
+        });
+    </script>
+    
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+/* General Reset and Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+:root {
+    --primary-blue: #4B6EF8;
+    --background-light: #f7f9fc;
+    --card-background: rgba(255, 255, 255, 0.8);
+    --text-dark: #333;
+    --text-light: #666;
+    --border-color: #ddd;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e0eafc, #cfdef3); /* Light gradient background */
+    padding: 20px;
+}
+
+/* Login Card Styling */
+.login-card {
+    width: 100%;
+    max-width: 550px; /* Max width for the card */
+    padding: 40px 30px;
+    border-radius: 20px;
+    background: var(--card-background);
+    box-shadow: 0 10px 30px var(--shadow-color), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+    backdrop-filter: blur(10px); /* Glassmorphism effect */
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Header/Logo Section */
+.header {
+    margin-bottom: 30px;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+}
+
+.logo-icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: var(--primary-blue);
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+}
+
+.header p {
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+/* Social Login Section */
+.social-login {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.social-icon {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 48px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 20px;
+    color: var(--text-dark);
+    text-decoration: none;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.social-icon:hover {
+    background-color: var(--background-light);
+    border-color: var(--primary-blue);
+}
+
+/* OR Separator */
+.or-separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--text-light);
+    font-size: 12px;
+    margin: 30px 0;
+}
+
+.or-separator::before,
+.or-separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.or-separator:not(:empty)::before {
+    margin-right: 15px;
+}
+
+.or-separator:not(:empty)::after {
+    margin-left: 15px;
+}
+
+/* Form Styling */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-group {
+    text-align: left;
+    position: relative;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px rgba(75, 110, 248, 0.2);
+}
+
+/* Password Field Specific Styles */
+.password-container {
+    position: relative;
+}
+
+.password-container input {
+    padding-right: 40px; /* Space for the toggle button */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Options Row */
+.options-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+}
+
+.remember-me input[type="checkbox"] {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    margin-right: 8px;
+    cursor: pointer;
+    position: relative;
+    top: 1px;
+}
+
+.remember-me input[type="checkbox"]:checked {
+    background-color: var(--primary-blue);
+    border-color: var(--primary-blue);
+}
+
+.remember-me input[type="checkbox"]:checked::after {
+    content: '\f00c'; /* Font Awesome checkmark */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    color: white;
+    font-size: 10px;
+    position: absolute;
+    top: 0;
+    left: 2px;
+}
+
+.options-row label {
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+.forgot-password {
+    color: var(--primary-blue);
+    text-decoration: none;
+    transition: text-decoration 0.2s;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Sign In Button */
+.sign-in-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #3a3a3a, #1a1a1a); /* Dark gradient for button */
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.sign-in-btn:hover {
+    background: linear-gradient(90deg, #444444, #222222);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Sign Up Link */
+.signup-link {
+    margin-top: 25px;
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.signup-link a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+/* Validation Styling */
+.error-message {
+    display: block;
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 5px;
+    text-align: left;
+    height: 14px; /* Maintain space even when empty */
+}
+
+/* Input error state */
+.input-group.error input {
+    border-color: #e74c3c;
+}
+
+
+
+/* Sign in Link */
+.signin {
+    margin-top: 25px;
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.signin a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.signin a:hover {
+    text-decoration: underline;
+}

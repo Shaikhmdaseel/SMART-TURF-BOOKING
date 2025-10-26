@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura - Sign Up</title>
+    
+    <link rel="stylesheet" href="index.css">
+    <!-- Font Awesome for social icons and password toggle -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+</head>
+<body>
+    <div class="login-card">
+        <div class="header">
+            <!-- Logo updated to Turf Master -->
+            <div class="logo">
+                <span class="logo-icon"></span>
+                Turf Master
+            </div>
+            <h2>Create Your Account</h2>
+            <p>Get started with managing your turf operations.</p>
+        </div>
+
+        <!-- Social Login buttons updated to match login page classes and icons -->
+        <div class="social-login">
+            <a href="#" class="social-icon google"><i class="fab fa-google"></i></a>
+           </div>
+
+        <div class="or-separator">
+            <span>OR</span>
+        </div>
+
+        <form class="login-form" id="registrationForm">
+            <!-- Full Name (Required) -->
+            <div class="input-group">
+                <label for="full_name">Your Full Name</label>
+                <input type="text" id="full_name" name="full_name" placeholder="John Doe" required>
+                <span class="error-message" id="nameError"></span>
+            </div>
+
+            <!-- Email Address (Required) -->
+            <div class="input-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="you@company.com" required>
+                <span class="error-message" id="emailError"></span>
+            </div>
+
+            <!-- Phone Number (Required for contact/support) -->
+            <div class="input-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="(123) 456-7890" required>
+                <span class="error-message" id="phoneError"></span>
+            </div>
+
+            <!-- Password (Required) -->
+            <div class="input-group">
+                <label for="password">Password</label>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" placeholder="Min. 8 characters" required minlength="8">
+                    <button type="button" class="toggle-password" id="togglePassword">
+                        <!-- Use the Font Awesome eye icon -->
+                        <i class="far fa-eye-slash" id="eyeIcon"></i> 
+                    </button>
+                </div>
+                <span class="error-message" id="passwordError"></span>
+            </div>
+            
+            <!-- Terms and Conditions Checkbox -->
+            <div class="options-row">
+                <div class="terms-check">
+                    <input id="terms" name="terms" type="checkbox" required>
+                    <label for="terms">
+                        I agree to the <a href="#">Terms of Service</a>.
+                    </label>
+                </div>
+                <!-- Error message for terms, placed outside the main label block -->
+                <span class="error-message" id="termsError"></span>
+            </div>
+            
+            <button type="submit" class="sign-in-btn">Sign Up</button>
+        </form>
+
+        <div class="signup-link">
+            Already have an account? <a href="login.html">Sign in</a>
+        </div>
+    </div>
+
+    <!-- Firebase SDK v11 -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
+        
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCEdy6zKaD5E_jEj7Kp512yBEfzpM57WWQ",
+            authDomain: "turfmaster-pro-web.firebaseapp.com",
+            projectId: "turfmaster-pro-web",
+            storageBucket: "turfmaster-pro-web.firebasestorage.app",
+            messagingSenderId: "691367310841",
+            appId: "1:691367310841:web:348924036eba10540fb928",
+            measurementId: "G-MEQ34BEQ5V"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        
+        // Make Firebase services available globally
+        window.firebaseAuth = auth;
+        window.firebaseProvider = provider;
+        
+        // Handle registration form submission
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('full_name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                // Update user profile with name
+                await updateProfile(user, {
+                    displayName: name
+                });
+                
+                // Store user data
+                const userData = {
+                    id: user.uid,
+                    name: name,
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    emailVerified: user.emailVerified
+                };
+                
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+                
+                // Redirect to home page
+                window.location.href = 'home.html';
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                const errorMessage = document.getElementById('emailError');
+                if (errorMessage) {
+                    errorMessage.textContent = error.message;
+                }
+            }
+        });
+        
+        // Handle Google sign-in
+        document.querySelector('.social-icon.google').addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                
+                // Store user data
+                const userData = {
+                    id: user.uid,
+                    name: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    emailVerified: user.emailVerified
+                };
+                
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+                
+                // Redirect to home page
+                window.location.href = 'home.html';
+                
+            } catch (error) {
+                console.error('Google sign-in error:', error);
+                const errorMessage = document.getElementById('emailError');
+                if (errorMessage) {
+                    errorMessage.textContent = 'Google sign-in failed. Please try again.';
+                }
+            }
+        });
+    </script>
+    
+    <script src="script.js"></script>
+</body>
+</html>
