@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turf Master - Reset Password</title>
+    <!-- Font Awesome for social icons, eye icons, and success icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <style>
+        /* --- CSS STYLES (MATCHING LOGIN/SIGNUP THEME) --- */
+
+        /* General Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #4B6EF8;
+            --success-green: #2ecc71;
+            --background-light: #f7f9fc;
+            --card-background: rgba(255, 255, 255, 0.8);
+            --text-dark: #333;
+            --text-light: #666;
+            --border-color: #ddd;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e0eafc, #cfdef3); /* Light gradient background */
+            padding: 20px;
+        }
+
+        /* Login Card Styling */
+        .login-card {
+            width: 100%;
+            max-width: 380px; /* Max width for the card */
+            padding: 40px 30px;
+            border-radius: 20px;
+            background: var(--card-background);
+            box-shadow: 0 10px 30px var(--shadow-color), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+            backdrop-filter: blur(10px); /* Glassmorphism effect */
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        /* Header/Logo Section */
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .logo-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary-blue);
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            color: var(--text-light);
+            min-height: 20px; /* Reserve space for dynamic message */
+        }
+
+        /* Form Styling */
+        .reset-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group {
+            text-align: left;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 2px rgba(75, 110, 248, 0.2);
+        }
+
+        /* Password Field Specific Styles */
+        .password-container {
+            position: relative;
+        }
+
+        .password-container input {
+            padding-right: 40px; /* Space for the toggle button */
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        /* OTP Grid for better visual appeal */
+        .otp-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+        }
+
+        .otp-grid input {
+            text-align: center;
+            padding: 15px 5px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Button Styling */
+        .action-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #3a3a3a, #1a1a1a); /* Dark gradient for button */
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(90deg, #444444, #222222);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .action-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        .resend-link {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .resend-link a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .resend-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Back to Login Link */
+        .back-to-login {
+            margin-top: 25px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .back-to-login a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-to-login a:hover {
+            text-decoration: underline;
+        }
+
+        /* Validation Styling */
+        .error-message {
+            display: block;
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            text-align: left;
+            height: 14px; /* Maintain space even when empty */
+        }
+
+        /* Input error state */
+        .input-group.error input {
+            border-color: #e74c3c !important;
+        }
+        
+        /* Success Message Block */
+        .success-message {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #ecfdf5;
+            border: 1px solid #a3e635;
+            border-radius: 12px;
+            color: #166534;
+            font-weight: 600;
+        }
+        
+        .success-message i {
+            color: var(--success-green);
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+        
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+            z-index: 10;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="header">
+            <div class="logo">
+                <span class="logo-icon"></span>
+                Turf Master
+            </div>
+            <h2 id="cardTitle">Forgot Your Password?</h2>
+            <p id="cardSubtitle">Enter your email to receive a verification code.</p>
+        </div>
+
+        <!-- Hidden Loading Indicator -->
+        <div class="loading-overlay hidden" id="loadingOverlay">
+            <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--primary-blue);"></i>
+        </div>
+
+        <!-- STEP 1: Email Input -->
+        <div id="step-email">
+            <form class="reset-form" id="emailForm">
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                    <span class="error-message" id="emailError"></span>
+                </div>
+                <button type="submit" class="action-btn">Send Verification Code</button>
+            </form>
+        </div>
+
+        <!-- STEP 2: OTP Verification (Hidden by default) -->
+        <div id="step-otp" class="hidden">
+            <form class="reset-form" id="otpForm">
+                <div class="input-group">
+                    <label for="otp">Verification Code (6 Digits)</label>
+                    <div class="otp-grid">
+                        <!-- OTP inputs will be generated by JS for better control -->
+                    </div>
+                    <span class="error-message" id="otpError" style="text-align: center;"></span>
+                </div>
+                
+                <button type="submit" class="action-btn" id="verifyOtpBtn" disabled>Verify Code</button>
+                <div class="resend-link">
+                    Didn't receive it? <a href="#" id="resendLink">Resend Code</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- STEP 3: New Password Input (Hidden by default) -->
+        <div id="step-new-password" class="hidden">
+            <form class="reset-form" id="newPasswordForm">
+                <div class="input-group">
+                    <label for="new_password">New Password</label>
+                    <div class="password-container">
+                        <input type="password" id="new_password" name="new_password" placeholder="Min. 8 characters" required minlength="8">
+                        <button type="button" class="toggle-password toggle-new-password" data-target="new_password">
+                            <i class="far fa-eye-slash" class="eye-icon"></i> 
+                        </button>
+                    </div>
+                    <span class="error-message" id="newPasswordError"></span>
+                </div>
+
+                <div class="input-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <div class="password-container">
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your new password" required minlength="8">
+                        <button type="button" class="toggle-password toggle-confirm-password" data-target="confirm_password">
+                            <i class="far fa-eye-slash" class="eye-icon"></i> 
+                        </button>
+                    </div>
+                    <span class="error-message" id="confirmPasswordError"></span>
+                </div>
+                
+                <button type="submit" class="action-btn">Reset Password</button>
+            </form>
+        </div>
+        
+        <!-- STEP 4: Success Message (Hidden by default) -->
+        <div id="step-success" class="hidden">
+            <div class="success-message">
+                <i class="fas fa-check-circle"></i>
+                <p>Password reset email sent successfully!</p>
+                <p style="font-size: 14px; margin-top: 10px;">Please check your email and follow the instructions to reset your password.</p>
+            </div>
+        </div>
+
+        <div class="back-to-login">
+            <a href="login.html">Back to Sign In</a>
+        </div>
+    </div>
+
+    <!-- --- JAVASCRIPT LOGIC --- -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Global UI Elements ---
+            const cardTitle = document.getElementById('cardTitle');
+            const cardSubtitle = document.getElementById('cardSubtitle');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const steps = {
+                email: document.getElementById('step-email'),
+                otp: document.getElementById('step-otp'),
+                new_password: document.getElementById('step-new-password'),
+                success: document.getElementById('step-success')
+            };
+            let userEmail = '';
+            
+            // --- Shared Validation Function ---
+            const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).toLowerCase());
+            
+            const validateField = (inputElement, errorElement, validationFn, errorMessage) => {
+                const value = inputElement.value.trim();
+                let isValid = validationFn(value);
+
+                if (isValid) {
+                    errorElement.textContent = '';
+                    inputElement.closest('.input-group')?.classList.remove('error');
+                } else {
+                    errorElement.textContent = errorMessage;
+                    inputElement.closest('.input-group')?.classList.add('error');
+                }
+                return isValid;
+            };
+
+            // --- Step Transition and UI Management ---
+            const showStep = (stepName) => {
+                Object.values(steps).forEach(step => {
+                    step.classList.add('hidden');
+                });
+                steps[stepName].classList.remove('hidden');
+
+                // Update card header based on step
+                if (stepName === 'email') {
+                    cardTitle.textContent = 'Forgot Your Password?';
+                    cardSubtitle.textContent = 'Enter your email to receive a verification code.';
+                } else if (stepName === 'otp') {
+                    cardTitle.textContent = 'Verify Code';
+                    cardSubtitle.innerHTML = `We sent a code to: <strong>${userEmail}</strong>`;
+                } else if (stepName === 'new_password') {
+                    cardTitle.textContent = 'Set New Password';
+                    cardSubtitle.textContent = 'Choose a strong password for your account.';
+                } else if (stepName === 'success') {
+                    cardTitle.textContent = 'Password Reset!';
+                    cardSubtitle.textContent = 'You can now sign in with your new password.';
+                }
+            };
+            
+            const toggleLoading = (show) => {
+                loadingOverlay.classList.toggle('hidden', !show);
+            };
+
+            // --- Universal Password Toggle Logic ---
+            document.querySelectorAll('.toggle-password').forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-target');
+                    const targetInput = document.getElementById(targetId);
+                    const icon = button.querySelector('i');
+                    
+                    const type = targetInput.type === 'password' ? 'text' : 'password';
+                    targetInput.type = type;
+                    
+                    // Toggle icon
+                    if (type === 'password') {
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                });
+            });
+
+
+            // ------------------------------------------------------------------
+            // --- STEP 1: EMAIL INPUT ---
+            // ------------------------------------------------------------------
+            const emailInput = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            const emailForm = document.getElementById('emailForm');
+            
+            // Live validation for email
+            emailInput.addEventListener('blur', () => validateField(emailInput, emailError, isValidEmail, 'Please enter a valid email address.'));
+
+            emailForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!validateField(emailInput, emailError, isValidEmail, 'Please enter a valid email address.')) {
+                    return;
+                }
+                
+                userEmail = emailInput.value.trim();
+                
+                toggleLoading(true);
+                
+                try {
+                    // Import Firebase Auth functions
+                    const { sendPasswordResetEmail } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js');
+                    
+                    // Initialize Firebase if not already done
+                    if (!window.firebaseAuth) {
+                        const { initializeApp } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js');
+                        const { getAuth } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js');
+                        
+                        const firebaseConfig = {
+                            apiKey: "AIzaSyCEdy6zKaD5E_jEj7Kp512yBEfzpM57WWQ",
+                            authDomain: "turfmaster-pro-web.firebaseapp.com",
+                            projectId: "turfmaster-pro-web",
+                            storageBucket: "turfmaster-pro-web.firebasestorage.app",
+                            messagingSenderId: "691367310841",
+                            appId: "1:691367310841:web:348924036eba10540fb928",
+                            measurementId: "G-MEQ34BEQ5V"
+                        };
+                        
+                        const app = initializeApp(firebaseConfig);
+                        window.firebaseAuth = getAuth(app);
+                    }
+                    
+                    // Send password reset email
+                    await sendPasswordResetEmail(window.firebaseAuth, userEmail);
+                    
+                    toggleLoading(false);
+                    showStep('success');
+                    
+                } catch (error) {
+                    console.error('Password reset error:', error);
+                    toggleLoading(false);
+                    emailError.textContent = error.message;
+                }
+            });
+
+            // ------------------------------------------------------------------
+            // --- STEP 2: OTP VERIFICATION ---
+            // ------------------------------------------------------------------
+            const otpGrid = document.querySelector('.otp-grid');
+            const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+            const otpError = document.getElementById('otpError');
+            const resendLink = document.getElementById('resendLink');
+            const OTP_LENGTH = 6;
+            
+            const setupOtpInputs = () => {
+                otpGrid.innerHTML = '';
+                for (let i = 0; i < OTP_LENGTH; i++) {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.maxLength = 1;
+                    input.id = `otp-${i}`;
+                    input.classList.add('otp-input');
+                    otpGrid.appendChild(input);
+                }
+                
+                const otpInputs = document.querySelectorAll('.otp-input');
+                otpInputs[0].focus();
+                
+                otpGrid.addEventListener('input', (e) => {
+                    const target = e.target;
+                    const value = target.value;
+
+                    // Ensure only digits are entered
+                    if (value && !/^\d$/.test(value)) {
+                        target.value = '';
+                        return;
+                    }
+
+                    // Move focus forward
+                    if (value && target.nextElementSibling) {
+                        target.nextElementSibling.focus();
+                    }
+                    
+                    // Check if all inputs are filled
+                    const allFilled = Array.from(otpInputs).every(input => input.value.length === 1);
+                    verifyOtpBtn.disabled = !allFilled;
+                });
+
+                otpGrid.addEventListener('keydown', (e) => {
+                    const target = e.target;
+                    // Handle Backspace
+                    if (e.key === 'Backspace' && !target.value && target.previousElementSibling) {
+                        target.previousElementSibling.focus();
+                        verifyOtpBtn.disabled = true;
+                    }
+                });
+            };
+
+            otpForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const otpInputs = document.querySelectorAll('.otp-input');
+                const otpCode = Array.from(otpInputs).map(input => input.value).join('');
+
+                if (otpCode.length !== OTP_LENGTH) {
+                    otpError.textContent = 'Please enter the 6-digit code.';
+                    return;
+                }
+                otpError.textContent = '';
+                
+                toggleLoading(true);
+                // --- PLACEHOLDER FOR FIREBASE OTP VERIFICATION ---
+                await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call delay
+                const isOtpCorrect = true; // Simulated success
+                // --- END PLACEHOLDER ---
+                toggleLoading(false);
+
+                if (isOtpCorrect) {
+                    console.log(`OTP verified: ${otpCode}`);
+                    showStep('new_password');
+                } else {
+                    otpError.textContent = 'Invalid verification code. Please try again.';
+                }
+            });
+            
+            resendLink.addEventListener('click', async (e) => {
+                e.preventDefault();
+                console.log('Resending OTP...');
+                toggleLoading(true);
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                toggleLoading(false);
+                alert('Verification code re-sent! (Simulated)');
+            });
+
+            // ------------------------------------------------------------------
+            // --- STEP 3: NEW PASSWORD INPUT ---
+            // ------------------------------------------------------------------
+            const newPasswordInput = document.getElementById('new_password');
+            const confirmPasswordInput = document.getElementById('confirm_password');
+            const newPasswordError = document.getElementById('newPasswordError');
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+            const newPasswordForm = document.getElementById('newPasswordForm');
+
+            // Validation functions
+            const isPasswordLongEnough = (val) => val.length >= 8;
+            const passwordsMatch = () => newPasswordInput.value === confirmPasswordInput.value;
+            
+            // Live validation
+            newPasswordInput.addEventListener('blur', () => validateField(newPasswordInput, newPasswordError, isPasswordLongEnough, 'Password must be at least 8 characters.'));
+            confirmPasswordInput.addEventListener('blur', () => {
+                if (passwordsMatch()) {
+                    confirmPasswordError.textContent = '';
+                    confirmPasswordInput.closest('.input-group').classList.remove('error');
+                } else {
+                    confirmPasswordError.textContent = 'Passwords do not match.';
+                    confirmPasswordInput.closest('.input-group').classList.add('error');
+                }
+            });
+
+            newPasswordForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // Final validation check
+                const isNewValid = validateField(newPasswordInput, newPasswordError, isPasswordLongEnough, 'Password must be at least 8 characters.');
+                const isConfirmValid = validateField(confirmPasswordInput, confirmPasswordError, passwordsMatch, 'Passwords do not match.');
+
+                if (!isNewValid || !isConfirmValid) {
+                    return;
+                }
+                
+                toggleLoading(true);
+                // --- PLACEHOLDER FOR FIREBASE PASSWORD RESET ---
+                await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API call delay
+                // --- END PLACEHOLDER ---
+                toggleLoading(false);
+                
+                console.log('Password successfully reset.');
+                showStep('success');
+            });
+        });
+    </script>
+</body>
+</html>
